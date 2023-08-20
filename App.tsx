@@ -30,6 +30,8 @@ import {
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 import { SocketContextProvider } from './src/context/socket';
+import { NotifierWrapper } from 'react-native-notifier';
+import {GestureHandlerRootView} from 'react-native-gesture-handler'
 
 const App = () => {
 
@@ -42,13 +44,17 @@ const App = () => {
   };
 
   return (
-    <SocketContextProvider>
-      <Provider store={store}>
-          <View  style={{flex: 1}}>
-            <AppNavigator/>
-          </View>
-      </Provider>
-    </SocketContextProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NotifierWrapper>
+        <SocketContextProvider>
+          <Provider store={store}>
+              <View  style={{flex: 1}}>
+                  <AppNavigator/>
+              </View>
+          </Provider>
+        </SocketContextProvider>
+      </NotifierWrapper>
+    </GestureHandlerRootView>
   );
 };
 

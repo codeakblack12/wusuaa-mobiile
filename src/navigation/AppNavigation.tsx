@@ -24,6 +24,11 @@ import SecurityComplete from '../screens/main/security/complete';
 import Profile from '../screens/main/profile';
 import AwaitingPayment from '../screens/main/dockyard/awaitingpayment';
 import ScanToPay from '../screens/main/dockyard/scantopay';
+import ChangePassword from '../screens/main/profile/password';
+import Account from '../screens/main/profile/account';
+import Warehouse from '../screens/main/profile/warehouse';
+import { trigger } from "react-native-haptic-feedback";
+import { Notifier, Easing } from 'react-native-notifier';
 
 enableScreens();
 const navigationRef = createNavigationContainerRef();
@@ -33,7 +38,7 @@ function App() {
 
     const dispatch = useAppDispatch()
 
-    const { userData } = useAppSelector(userState)
+    const { userData, active_warehouse } = useAppSelector(userState)
 
     const isAdmin = userData?.role?.includes("SUPER_ADMIN") || userData?.role?.includes("ADMIN") || userData?.role?.includes("MANAGER")
 
@@ -42,24 +47,40 @@ function App() {
     const [isAuth, setIsAuth] = useState(false)
     const [checked, setChecked] = useState(false)
 
+    const options = {
+        enableVibrateFallback: true,
+        ignoreAndroidSystemSettings: false,
+    };
+
     useEffect(() => {
         checkIsAuth()
     }, [])
 
     useEffect(() => {
-        if(userData?.warehouse?.length && (isAdmin || userData?.role.includes("SALES"))){
-            socket.on(`SALES-${userData?.warehouse[0]}`, (payload: any) => {
+        if(active_warehouse !== "" && (isAdmin || userData?.role?.includes("SALES"))){
+            socket.on(`SALES-${active_warehouse}`, (payload: any) => {
+                // trigger("notificationSuccess", options);
+                // console.log(payload)
+                // Notifier.showNotification({
+                //     title: `${active_warehouse}-${payload?.uid?.toUpperCase()}`,
+                //     description: 'Item Added to Cart',
+                //     duration: 0,
+                //     showAnimationDuration: 800,
+                //     showEasing: Easing.bounce,
+                //     hideOnPress: false,
+                // });
                 dispatch(addCart(payload))
             })
 
-            socket.on(`DOCKYARD-${userData?.warehouse[0]}`, (payload: any) => {
+            socket.on(`DOCKYARD-${active_warehouse}`, (payload: any) => {
                 console.log(payload)
+                trigger("notificationSuccess", options);
                 dispatch(addDockCart(payload))
             })
 
             return () => {
-                socket.off(`SALES-${userData?.warehouse[0]}`);
-                socket.off(`DOCKYARD-${userData?.warehouse[0]}`);
+                socket.off(`SALES-${active_warehouse}`);
+                socket.off(`DOCKYARD-${active_warehouse}`);
             };
         }
 
@@ -73,7 +94,7 @@ function App() {
         //     };
         // }
 
-    }, [userData, socket])
+    }, [userData, active_warehouse, socket])
 
     const checkIsAuth = async () => {
         try {
@@ -117,6 +138,15 @@ function App() {
                 <RootStack.Screen name="auth" component={AuthStack} options={BottomSheetTransition} />
                 <RootStack.Screen name="dashboard" component={Dashboard} options={BottomSheetTransition} />
                 <RootStack.Screen name="profile" component={Profile} options={BottomSheetTransition} />
+                <RootStack.Screen name="account" component={Account}
+                options={{}}
+                />
+                <RootStack.Screen name="switchwarehouse" component={Warehouse}
+                options={{}}
+                />
+                <RootStack.Screen name="changepassword" component={ChangePassword}
+                options={{}}
+                />
                 <RootStack.Screen name="inventory" component={Inventory}
                 options={{}}
                 />

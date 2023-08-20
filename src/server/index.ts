@@ -1,6 +1,7 @@
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-export const WUSUAA_API = "https://coral-app-r6lzx.ondigitalocean.app/";
+export const WUSUAA_API = "https://f7ec-102-212-163-17.ngrok-free.app/";
+// export const WUSUAA_API = "https://staging.wusuaafrozenfoods.com/";
 
 export const doPost = async (url: string, payload: any) => {
   try {
@@ -49,6 +50,21 @@ export const sendPost = async ( url: string, payload: any ) => {
     });
 
     return response
+};
+
+export const sendPut = async ( url: string, payload: any ) => {
+
+  const token: any = await AsyncStorage.getItem("USER_TOKEN");
+
+  var response = await axios.put(WUSUAA_API + url, payload, {
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        "Charset": "UTF-8"
+      },
+  });
+
+  return response
 };
 
 export const sendDelete = async ( url: string, payload: any ) => {

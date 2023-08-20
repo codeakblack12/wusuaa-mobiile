@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, Pressable, FlatList, TouchableOpacity, Alert, 
 import { NavigationProp } from '@react-navigation/native';
 import { BaseText, BaseButton } from '../../../components/common';
 import { globalStyles } from '../../../utils/globalStyles';
-import { hp, wp, fontSz } from '../../../utils/constants';
+import { hp, wp, fontSz, HITSLOP } from '../../../utils/constants';
 import { colors } from '../../../utils/colors';
 import Fonts from '../../../utils/fonts';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -25,7 +25,7 @@ const Profile: FC<ProfileProp> = ({navigation, route}) => {
                 width: '100%',
                 marginTop: insets.top
             }]}>
-                <Pressable onPress={() => navigation.goBack()}>
+                <Pressable hitSlop={HITSLOP} onPress={() => navigation.goBack()}>
                     <icons.AntDesign name="arrowleft" size={hp(20)} color={colors.primaryTxt} />
                 </Pressable>
                 <View
@@ -82,7 +82,32 @@ const Profile: FC<ProfileProp> = ({navigation, route}) => {
     return(
         <View style={[globalStyles.wrapper]}>
             <Header/>
-            <View style={{marginVertical: hp(20)}} />
+            <View style={{marginBottom: hp(20)}} />
+            <ButtonRender
+            accent={colors.black}
+            back={colors.white}
+            title={"My Account"}
+            icon={<icons.SimpleLineIcons name="user" size={20} color={colors.black} />}
+            onPress={() => navigation.navigate("account")}
+            />
+            <View style={{marginTop: hp(20)}}>
+                <ButtonRender
+                accent={colors.black}
+                back={colors.white}
+                title={"Change Password"}
+                icon={<icons.SimpleLineIcons name="lock" size={20} color={colors.black} />}
+                onPress={() => navigation.navigate("changepassword")}
+                />
+            </View>
+            <View style={{marginVertical: hp(20)}}>
+                <ButtonRender
+                accent={colors.black}
+                back={colors.white}
+                title={"Switch Warehouse"}
+                icon={<icons.SimpleLineIcons name="organization" size={20} color={colors.black} />}
+                onPress={() => navigation.navigate("switchwarehouse")}
+                />
+            </View>
             <ButtonRender
             accent={colors.white}
             back={colors.black}

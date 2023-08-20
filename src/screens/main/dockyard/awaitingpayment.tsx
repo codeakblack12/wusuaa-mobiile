@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import React, {FC, useContext, useEffect} from 'react'
 import { globalStyles } from '../../../utils/globalStyles'
 import icons from '../../../utils/icons'
-import { wp, hp, fontSz } from '../../../utils/constants'
+import { wp, hp, fontSz, HITSLOP } from '../../../utils/constants'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../../../utils/colors'
 import { BaseText, BaseButton } from '../../../components/common'
@@ -48,7 +48,7 @@ const AwaitingPayment: FC<AwaitingPaymentProp> = ({navigation, route}) => {
                 width: '100%',
                 marginTop: insets.top
             }]}>
-                <Pressable onPress={() => navigation.goBack()}>
+                <Pressable hitSlop={HITSLOP} onPress={() => navigation.goBack()}>
                     <icons.AntDesign name="arrowleft" size={hp(20)} color={colors.primaryTxt} />
                 </Pressable>
                 <View

@@ -11,7 +11,7 @@ import BoxIcon from "../../assets/dashboard/svg/box.svg";
 import PaperIcon from "../../assets/dashboard/svg/paper.svg";
 import ShipIcon from "../../assets/dashboard/svg/shipp.svg";
 import CartIcon from "../../assets/dashboard/svg/cart.svg";
-import { userState } from '../../redux/slices/userSlice';
+import { changeWarehouse, userState } from '../../redux/slices/userSlice';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { getCategories } from '../../redux/slices/inventorySlice';
 import { getCarts, getDockyardCarts, salesState, selectDockCart } from '../../redux/slices/salesSlice';
@@ -32,27 +32,35 @@ const Dashboard: FC<DashboardProp> = ({navigation}) => {
 
     const { getTokenn } = useContext(SocketContext)
 
-    const { userData } = useAppSelector(userState)
+    const { userData, active_warehouse } = useAppSelector(userState)
     const { dockyard_carts } = useAppSelector(salesState)
 
     const isAdmin = userData?.role?.includes("SUPER_ADMIN") || userData?.role.includes("ADMIN") || userData?.role.includes("MANAGER")
 
     useEffect(() => {
+        getActiveWarehouse()
         getTokenn()
         dispatch(getCategories())
     }, [])
+
+    const getActiveWarehouse = async () => {
+        if(userData?.warehouse?.length){
+            dispatch(changeWarehouse(userData?.warehouse[0]))
+        }
+    }
 
     useEffect(() => {
         const didFocusListener = navigation.addListener('focus', async () => {
             dispatch(selectDockCart({}))
             if(isAdmin || userData?.role?.includes("SALES")){
-                await dispatch(getCarts())
-                await dispatch(getDockyardCarts())
+                console.log(active_warehouse)
+                await dispatch(getCarts(active_warehouse || userData?.warehouse[0]))
+                await dispatch(getDockyardCarts(active_warehouse || userData?.warehouse[0]))
             }
         });
 
         return () => didFocusListener();
-    }, [navigation]);
+    }, [navigation, active_warehouse]);
 
     const data = [
         {
@@ -60,28 +68,28 @@ const Dashboard: FC<DashboardProp> = ({navigation}) => {
             title: "Inventory Management",
             icon: <BoxIcon/>,
             onPress: () => navigation.navigate("inventory"),
-            disabled: !isAdmin && userData?.role.includes("INVENTORY_MANGEMENT")
+            disabled: !isAdmin && !userData?.role.includes("INVENTORY_MANGEMENT")
         },
         {
             id: 2,
             title: "Dockyard Sales",
             icon: <ShipIcon/>,
             onPress: () => navigation.navigate("dockyard"),
-            disabled: !isAdmin && userData?.role.includes("SALES")
+            disabled: !isAdmin && !userData?.role.includes("SALES")
         },
         {
             id: 3,
             title: "Warehouse Sales",
             icon: <CartIcon/>,
             onPress: () => navigation.navigate("sales"),
-            disabled: !isAdmin && userData?.role.includes("SALES")
+            disabled: !isAdmin && !userData?.role.includes("SALES")
         },
         {
             id: 4,
             title: "Security Checks",
             icon: <PaperIcon/>,
             onPress: () => navigation.navigate("security"),
-            disabled: !isAdmin && userData?.role.includes("SECURITY")
+            disabled: !isAdmin && !userData?.role.includes("SECURITY")
         },
     ]
 
@@ -174,7 +182,7 @@ const Dashboard: FC<DashboardProp> = ({navigation}) => {
                         }}
                         lineHeight={hp(16)}
                     >
-                        {`${item?.item_count || 0} item(s) scanned`}
+                        {`${item?.item_count || 0} item(s) added`}
                     </BaseText>
 
                 </View>
@@ -219,6 +227,15 @@ const Dashboard: FC<DashboardProp> = ({navigation}) => {
                         lineHeight={hp(19)}
                     >
                         {`Welcome ${userData.firstName}`}
+                    </BaseText>
+                    <BaseText
+                        style={{
+                            fontSize: fontSz(12),
+                            fontFamily: Fonts.Regular,
+                            color: colors.gray
+                        }}
+                    >
+                        {`Current Warehouse: ${active_warehouse}`}
                     </BaseText>
                 </View>
                 <Pressable onPress={() => navigation.navigate("profile")} style={{

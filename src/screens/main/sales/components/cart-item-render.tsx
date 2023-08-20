@@ -13,14 +13,31 @@ import { addItemToCart } from '../../../../redux/slices/salesSlice'
 import TickIcon from "../../../../assets/sales/icons/tick-circle.svg"
 import { firstLetterUppercase } from '../../../../utils/functions'
 import { globalStyles } from '../../../../utils/globalStyles'
+import { trigger } from "react-native-haptic-feedback";
+import { Notifier, Easing } from 'react-native-notifier';
 
 
 export const CartItemHeader = ({counter, cart}: {counter: string, cart: string}) => {
     const dispatch = useAppDispatch()
     const { socket } = useContext(SocketContext);
 
+    const options = {
+        enableVibrateFallback: true,
+        ignoreAndroidSystemSettings: false,
+    };
+
     useEffect(() => {
         socket.on(cart, (payload: any) => {
+            trigger("notificationSuccess", options);
+            console.log(payload)
+            Notifier.showNotification({
+                title: `${payload?.uid?.toUpperCase()}`,
+                description: 'Item Added to Cart',
+                duration: 0,
+                showAnimationDuration: 800,
+                showEasing: Easing.bounce,
+                hideOnPress: false,
+            });
             addItem(payload)
         })
 

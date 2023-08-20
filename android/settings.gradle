@@ -12,4 +12,6 @@ if (settings.hasProperty("newArchEnabled") && settings.newArchEnabled == "true")
     project(':react-native-splash-screen').projectDir = file('../node_modules/react-native-splash-screen/android')
     include ':react-native-vector-icons'
     project(':react-native-vector-icons').projectDir = file('../node_modules/react-native-vector-icons/android')
+    include ':react-native-haptic-feedback'
+    project(':react-native-haptic-feedback').projectDir = file('../node_modules/react-native-haptic-feedback/android')
 }

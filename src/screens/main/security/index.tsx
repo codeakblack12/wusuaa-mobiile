@@ -4,7 +4,7 @@ import { NavigationProp } from '@react-navigation/native';
 import { BaseText } from '../../../components/common';
 import { globalStyles } from '../../../utils/globalStyles';
 import { RNCamera } from 'react-native-camera';
-import { hp, wp, fontSz } from '../../../utils/constants';
+import { hp, wp, fontSz, HITSLOP } from '../../../utils/constants';
 import { colors } from '../../../utils/colors';
 import Fonts from '../../../utils/fonts';
 import { Modalize } from 'react-native-modalize';
@@ -58,7 +58,7 @@ const Security: FC<SecurityProp> = ({navigation}) => {
                 position: "absolute",
                 top: insets.top,
             }]}>
-                <Pressable onPress={() => navigation.goBack()}>
+                <Pressable hitSlop={HITSLOP} onPress={() => navigation.goBack()}>
                     <icons.AntDesign name="arrowleft" size={hp(20)} color={colors.white} />
                 </Pressable>
                 <View

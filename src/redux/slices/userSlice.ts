@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const initialState = {
     userData: {},
     userToken: '',
+    active_warehouse: null,
     loggedIn: false,
     loading: false,
     error: null,
@@ -41,6 +42,13 @@ export const getPrevMe = createAsyncThunk(
         if(load){
             return load
         }
+    }
+)
+
+export const changeWarehouse = createAsyncThunk(
+    'user/changeWarehouse',
+    async (payload: string) => {
+        return payload
     }
 )
 
@@ -102,6 +110,15 @@ const UserSlice = createSlice({
             state.loggedIn = false
             state.loading = false
             // state.error = action.error.message
+        })
+
+        // CHANGE WAREHOUSE
+        builder.addCase(changeWarehouse.pending, (state) => {
+        })
+        builder.addCase(changeWarehouse.fulfilled, (state, action) => {
+            state.active_warehouse = action.payload
+        })
+        builder.addCase(changeWarehouse.rejected, (state, action) => {
         })
     }
 })

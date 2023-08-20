@@ -16,16 +16,16 @@ const initialState = {
 
 export const getCarts = createAsyncThunk(
     'sales/getcarts',
-    async () => {
-        const response = await getRequest("sales/warehouse-carts")
+    async (payload: string) => {
+        const response = await getRequest(`sales/warehouse-carts/${payload}`)
         return response.data
     }
 )
 
 export const getDockyardCarts = createAsyncThunk(
     'sales/getdockyardcarts',
-    async () => {
-        const response = await getRequest("sales/dockyard-carts")
+    async (payload: string) => {
+        const response = await getRequest(`sales/dockyard-carts/${payload}`)
         return response.data
     }
 )
@@ -67,8 +67,15 @@ export const initCreateDockCart = createAsyncThunk(
 
 export const selectDockCart = createAsyncThunk(
     'sales/selectDockCart',
-    async (payload) => {
+    async (payload: string) => {
         return payload
+    }
+)
+
+export const clearDockCart = createAsyncThunk(
+    'sales/clearDockCart',
+    async () => {
+        return
     }
 )
 
@@ -206,8 +213,18 @@ const SalesSlice = createSlice({
         builder.addCase(selectDockCart.fulfilled, (state, action) => {
             state.create_dock = false
             state.selected_dock_cart = action.payload
+            // state.dockyard_carts = []
         })
         builder.addCase(selectDockCart.rejected, (state, action) => {
+        })
+
+        // CLEAR DOCK CART
+        builder.addCase(clearDockCart.pending, (state) => {
+        })
+        builder.addCase(clearDockCart.fulfilled, (state, action) => {
+            state.dockyard_carts = []
+        })
+        builder.addCase(clearDockCart.rejected, (state, action) => {
         })
     },
 })

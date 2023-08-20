@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, Pressable, FlatList, TouchableOpacity, Alert, 
 import { NavigationProp } from '@react-navigation/native';
 import { BaseText, BaseButton } from '../../../components/common';
 import { globalStyles } from '../../../utils/globalStyles';
-import { hp, wp, fontSz } from '../../../utils/constants';
+import { hp, wp, fontSz, HITSLOP } from '../../../utils/constants';
 import { colors } from '../../../utils/colors';
 import Fonts from '../../../utils/fonts';
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks';
@@ -54,7 +54,7 @@ const SecurityCart: FC<SecurityCartProp> = ({navigation, route}) => {
                 width: '100%',
                 marginTop: insets.top
             }]}>
-                <Pressable onPress={() => navigation.goBack()}>
+                <Pressable hitSlop={HITSLOP} onPress={() => navigation.goBack()}>
                     <icons.AntDesign name="arrowleft" size={hp(20)} color={colors.primaryTxt} />
                 </Pressable>
                 <View
@@ -142,7 +142,7 @@ const SecurityCart: FC<SecurityCartProp> = ({navigation, route}) => {
                         color: colors.primaryTxt, textAlign: 'left', fontFamily: Fonts.Light, fontSize: fontSz(12),
                         marginTop: hp(4)
                     }}>
-                        {`${item?.quantity} Pack(s) - ${formatMoney(item?.price || 0, item?.currency)}`}
+                        {`${item?.quantity} Pack(s) - ${formatMoney(item?.price || 0, data?.currency)}`}
                     </BaseText>
                 </View>
                 <View>

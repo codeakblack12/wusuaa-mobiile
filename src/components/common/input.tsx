@@ -24,6 +24,7 @@ interface BaseInputProps {
     autoFocus?: boolean;
     maxLength?: number;
     icon?: any;
+    leftIcon?: any;
     iconPress?: Function;
     contStyle?: ViewStyle;
     iconStyle?: ViewStyle;
@@ -59,6 +60,7 @@ const BaseInput: React.FC<BaseInputProps> = ({
     autoFocus,
     maxLength,
     icon,
+    leftIcon,
     iconPress,
     contStyle,
     iconStyle,
@@ -108,8 +110,9 @@ const BaseInput: React.FC<BaseInputProps> = ({
                 // {borderColor}
                 ]}
             >
+            {leftIcon && <View style={styles.lefticonArea}>{leftIcon}</View>}
             <TextInput
-                style={[styles.inputStyle, textInputStyle, {paddingLeft: wp(15)}]}
+                style={[styles.inputStyle, {paddingLeft: wp(15)}, textInputStyle]}
                 onChangeText={onChangeText}
                 autoCorrect={false}
                 value={value}
@@ -130,7 +133,7 @@ const BaseInput: React.FC<BaseInputProps> = ({
                 // ref={ref => inputRef = ref}
                 autoFocus={autoFocus}
             />
-            {icon && <View>{icon}</View>}
+            {icon && <View style={styles.iconArea}>{icon}</View>}
             {password && !icon &&
             <TouchableOpacity
                 hitSlop={HITSLOP}
@@ -170,6 +173,9 @@ const styles = StyleSheet.create({
     },
     iconArea: {
       paddingRight: wp(15)
+    },
+    lefticonArea: {
+      paddingLeft: wp(15)
     },
     errorWrapper: {
         marginTop: hp(5),

@@ -4,7 +4,7 @@ import { NavigationProp } from '@react-navigation/native';
 import { BaseText, BaseButton } from '../../../components/common';
 import { globalStyles } from '../../../utils/globalStyles';
 import { RNCamera } from 'react-native-camera';
-import { hp, wp, fontSz } from '../../../utils/constants';
+import { hp, wp, fontSz, HITSLOP } from '../../../utils/constants';
 import { colors } from '../../../utils/colors';
 import Fonts from '../../../utils/fonts';
 import { Modalize } from 'react-native-modalize';
@@ -61,7 +61,7 @@ const DockyardCart: FC<DockyardCartProp> = ({navigation, route}) => {
                 width: '100%',
                 marginTop: insets.top
             }]}>
-                <Pressable onPress={() => navigation.goBack()}>
+                <Pressable hitSlop={HITSLOP} onPress={() => navigation.goBack()}>
                     <icons.AntDesign name="arrowleft" size={hp(20)} color={colors.primaryTxt} />
                 </Pressable>
                 <View
@@ -196,6 +196,29 @@ const DockyardCart: FC<DockyardCartProp> = ({navigation, route}) => {
         }, 1000)
     }
 
+    const SummaryData = [
+        {
+            id: 1,
+            title: "Subtotal",
+            value: formatMoney(data?.subtotal || 0, data?.currency)
+        },
+        {
+            id: 2,
+            title: `NHIL/GETFD/COVID (${Math.round(data?.covidVatValue * 10) / 10 || "0"}%)`,
+            value: formatMoney(data?.covidVat || 0, data?.currency)
+        },
+        {
+            id: 3,
+            title: `VAT(${Math.round(data?.vatValue * 10) / 10 || "0"}%)`,
+            value: formatMoney(data?.vat || 0, data?.currency)
+        },
+        {
+            id: 4,
+            title: `Total`,
+            value: formatMoney(data?.total || 0, data?.currency)
+        },
+    ]
+
     const Summary = ({}) => {
         return(
             <View>
@@ -207,22 +230,24 @@ const DockyardCart: FC<DockyardCartProp> = ({navigation, route}) => {
                 }}>
                     Checkout Summary
                 </BaseText>
-                <View style={styles.subtotal_container}>
+                {SummaryData?.map((val) => {
+                    return <View style={styles.subtotal_container}>
                     <BaseText
                     lineHeight={hp(22)}
                     style={{
                         color: colors.black, textAlign: 'left', fontFamily: Fonts.Bold, fontSize: fontSz(16)
                     }}>
-                        Subtotal
+                        {val?.title}
                     </BaseText>
                     <BaseText
                     lineHeight={hp(22)}
                     style={{
                         color: colors.black, textAlign: 'left', fontFamily: Fonts.Bold, fontSize: fontSz(16)
                     }}>
-                        {formatMoney(data?.subtotal || 0, data?.currency)}
+                        {val?.value}
                     </BaseText>
                 </View>
+                })}
             </View>
         )
     }

@@ -4,7 +4,7 @@ import { NavigationProp } from '@react-navigation/native';
 import { BaseText } from '../../../components/common';
 import { globalStyles } from '../../../utils/globalStyles';
 import { RNCamera } from 'react-native-camera';
-import { hp, wp, fontSz, linearLayoutAnimation } from '../../../utils/constants';
+import { hp, wp, fontSz, linearLayoutAnimation, HITSLOP } from '../../../utils/constants';
 import { colors } from '../../../utils/colors';
 import Fonts from '../../../utils/fonts';
 import { Modalize } from 'react-native-modalize';
@@ -19,12 +19,16 @@ import CartItemRender from './components/cart-item-render';
 import { CartHeader, CartList } from './components/carts-render';
 import debounce from "lodash.debounce"
 import { CartItemHeader, CartItemList } from './components/cart-item-render';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { trigger } from "react-native-haptic-feedback";
+import { Notifier, Easing } from 'react-native-notifier';
 
 interface SalesProp {
     navigation: NavigationProp;
 }
 
 const Sales: FC<SalesProp> = ({navigation}) => {
+    const insets = useSafeAreaInsets();
     const dispatch = useAppDispatch()
     const { userData } = useAppSelector(userState)
     const { carts, sectioned_carts, cart_items } = useAppSelector(salesState)
@@ -38,11 +42,17 @@ const Sales: FC<SalesProp> = ({navigation}) => {
 
     const [tint, setTint] = useState("#fff")
 
+
     const [selectedCart, setSelectedCart] = useState('')
 
     const [isScanning, setIsScanning] = useState(false)
 
     const { socket } = useContext(SocketContext);
+
+    const options = {
+        enableVibrateFallback: true,
+        ignoreAndroidSystemSettings: false,
+    };
 
     const onError = useCallback(
         (error: any) => {
@@ -61,6 +71,7 @@ const Sales: FC<SalesProp> = ({navigation}) => {
 
             if(already_scanned.includes(content)){
                 setTint("red")
+                 trigger("notificationError", options);
                 setTimeout(() => {
                     setTint("#fff")
                 }, 2500)
@@ -68,6 +79,7 @@ const Sales: FC<SalesProp> = ({navigation}) => {
             }
 
             setTint("green")
+            trigger("soft", options);
             await socket.emit('add_to_cart', {
                 cart: selectedCart?.uid,
                 item: content
@@ -99,9 +111,9 @@ const Sales: FC<SalesProp> = ({navigation}) => {
                 width: '100%',
                 padding: hp(15),
                 position: "absolute",
-                top: hp(10),
+                top: insets.top,
             }]}>
-                <Pressable onPress={() => navigation.goBack()}>
+                <Pressable hitSlop={HITSLOP} onPress={() => navigation.goBack()}>
                     <icons.AntDesign name="arrowleft" size={hp(20)} color={colors.white} />
                 </Pressable>
                 <View

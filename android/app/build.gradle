@@ -271,6 +271,8 @@ dependencies {
 
     implementation project(':react-native-splash-screen')
 
+    implementation project(":react-native-haptic-feedback")
+
     implementation project(':react-native-vector-icons')
 
     implementation "com.facebook.soloader:soloader:0.10.5+"

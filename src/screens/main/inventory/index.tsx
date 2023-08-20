@@ -17,13 +17,15 @@ import { addItem } from '../../../redux/slices/inventorySlice';
 import { firstLetterUppercase } from '../../../utils/functions';
 import { SocketContext } from '../../../context/socket';
 import { userState } from '../../../redux/slices/userSlice';
+import { trigger } from "react-native-haptic-feedback";
+import { Notifier, Easing } from 'react-native-notifier';
 
 interface InventoryProp {
     navigation: NavigationProp;
 }
 
 const Inventory: FC<InventoryProp> = ({navigation}) => {
-    const { userData } = useAppSelector(userState)
+    const { userData, active_warehouse } = useAppSelector(userState)
     const dispatch = useAppDispatch()
     const { socket } = useContext(SocketContext)
 
@@ -34,13 +36,27 @@ const Inventory: FC<InventoryProp> = ({navigation}) => {
 
     const [tint, setTint] = useState("#fff")
 
+    const options = {
+        enableVibrateFallback: true,
+        ignoreAndroidSystemSettings: false,
+    };
+
     useEffect(() => {
-        socket.on(`INVENTORY-${userData?.warehouse[0]}`, async (payload: any) => {
+        socket.on(`INVENTORY-${active_warehouse}`, async (payload: any) => {
+            trigger("notificationSuccess", options);
+            Notifier.showNotification({
+                title: `${payload?.uid?.toUpperCase()}`,
+                description: 'Item Added to Inventory',
+                duration: 0,
+                showAnimationDuration: 800,
+                showEasing: Easing.bounce,
+                hideOnPress: false,
+            });
             await dispatch(addItem(payload))
         })
 
         return () => {
-            socket.off(`INVENTORY-${userData?.warehouse[0]}`);
+            socket.off(`INVENTORY-${active_warehouse}`);
         };
     }, [])
 
@@ -56,6 +72,7 @@ const Inventory: FC<InventoryProp> = ({navigation}) => {
 
         if(!content){
             setTint("red")
+            trigger("notificationError", options);
             setTimeout(() => {
                 setTint("#fff")
             }, 2500)
@@ -76,6 +93,7 @@ const Inventory: FC<InventoryProp> = ({navigation}) => {
             //     ]
             // );
             setTint("red")
+            trigger("notificationError", options);
             setTimeout(() => {
                 setTint("#fff")
             }, 2500)
@@ -83,8 +101,10 @@ const Inventory: FC<InventoryProp> = ({navigation}) => {
         }
         // const resp = await dispatch(addItem(content))
         setTint("green")
+        trigger("soft", options);
         await socket.emit('add_to_inventory', {
             id: content,
+            warehouse: active_warehouse
         })
         setTimeout(() => {
             setTint("#fff")
@@ -151,10 +171,12 @@ const Inventory: FC<InventoryProp> = ({navigation}) => {
 
     const ModalHeader = ({}) => {
         return(
-            <View style={{alignItems: 'center'}}>
+            <Pressable
+            // onPress={() => modalizeRef?.current?.open()}
+            style={{alignItems: 'center'}}>
                 <BaseText style={styles.title}>Scan  Barcode</BaseText>
                 <BaseText style={styles.description}>View scanned items</BaseText>
-            </View>
+            </Pressable>
         )
     }
 
