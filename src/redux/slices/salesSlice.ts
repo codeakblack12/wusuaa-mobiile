@@ -72,6 +72,13 @@ export const selectDockCart = createAsyncThunk(
     }
 )
 
+export const removeDockCart = createAsyncThunk(
+    'sales/removeDockCart',
+    async (payload: string) => {
+        return payload
+    }
+)
+
 export const clearDockCart = createAsyncThunk(
     'sales/clearDockCart',
     async () => {
@@ -216,6 +223,20 @@ const SalesSlice = createSlice({
             // state.dockyard_carts = []
         })
         builder.addCase(selectDockCart.rejected, (state, action) => {
+        })
+
+        // REMOVE DOCK CART
+        builder.addCase(removeDockCart.pending, (state) => {
+        })
+        builder.addCase(removeDockCart.fulfilled, (state, action) => {
+            state.create_dock = false
+            state.dockyard_carts = state.dockyard_carts.filter((val: any) => {
+                if(val.uid !== action?.payload){
+                    return val
+                }
+            })
+        })
+        builder.addCase(removeDockCart.rejected, (state, action) => {
         })
 
         // CLEAR DOCK CART

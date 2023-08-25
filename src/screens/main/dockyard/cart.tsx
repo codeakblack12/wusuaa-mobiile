@@ -38,6 +38,7 @@ const DockyardCart: FC<DockyardCartProp> = ({navigation, route}) => {
     const insets = useSafeAreaInsets();
 
     const [data, setData] = useState(null)
+    const [name, setName] = useState("")
     const [identifier, setIdentifier] = useState("")
     const [paytype, setPaytype] = useState("")
     const [loading, setLoading] = useState(true)
@@ -132,6 +133,7 @@ const DockyardCart: FC<DockyardCartProp> = ({navigation, route}) => {
             setLoading(true)
             const response = await sendPost('sales/payment/paystack-link', {
                 id: data?._id,
+                customer_name: name,
                 email: identifier,
                 location: "DOCKYARD"
             })
@@ -175,7 +177,8 @@ const DockyardCart: FC<DockyardCartProp> = ({navigation, route}) => {
             const response = await sendPost('sales/dockyard-cart/checkout', {
                 id: data._id,
                 payment_type: paytype,
-                email: identifier
+                email: identifier,
+                customer_name: name,
             })
             setLoading(false)
             setTModal(false)
@@ -296,7 +299,9 @@ const DockyardCart: FC<DockyardCartProp> = ({navigation, route}) => {
             onPayment={onPayment}
             />
             <TextInputModal
-            label={`Enter ${paytype === "MOMO" ? "Phone Number" : "Email Address"}${(paytype === "CASH" || paytype === "POS") ? " (Optional)" : ""}`}
+            name={name}
+            setName={setName}
+            label={`Enter ${paytype === "MOMO" ? ("Phone Number") : ("Email Address")}${(paytype === "CASH" || paytype === "POS") ? "/Phone Number (Optional)" : ""}`}
             visible={tmodal}
             onCancel={() => {
                 setTModal(false)
@@ -306,11 +311,11 @@ const DockyardCart: FC<DockyardCartProp> = ({navigation, route}) => {
             disabled={(paytype === "CASH" || paytype === "POS") ? false : (identifier === "" ? true : false)}
             onChange={(text: string) => setIdentifier(text)}
             onConfirm={() => {
-                if(paytype === "MOMO"){
-                    momoPayment()
-                    return
-                }
-                else if(paytype === "CASH" || paytype === "POS"){
+                // if(paytype === "MOMO"){
+                //     momoPayment()
+                //     return
+                // }
+                if(paytype === "MOMO" || paytype === "CASH" || paytype === "POS"){
                     confirmPayment()
                     return
                 }

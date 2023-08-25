@@ -18,7 +18,7 @@ import { getPrevMe } from '../redux/slices/userSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { SocketContext } from '../context/socket';
 import { userState } from '../redux/slices/userSlice';
-import { addCart, addDockCart } from '../redux/slices/salesSlice';
+import { addCart, addDockCart, removeDockCart } from '../redux/slices/salesSlice';
 import SecurityCart from '../screens/main/security/receipt';
 import SecurityComplete from '../screens/main/security/complete';
 import Profile from '../screens/main/profile';
@@ -76,6 +76,11 @@ function App() {
                 console.log(payload)
                 trigger("notificationSuccess", options);
                 dispatch(addDockCart(payload))
+            })
+
+            socket.on(`CLOSE-DOCKCART-${active_warehouse}`, (payload: any) => {
+                trigger("soft", options);
+                dispatch(removeDockCart(payload))
             })
 
             return () => {

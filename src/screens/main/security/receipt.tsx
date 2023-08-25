@@ -115,7 +115,7 @@ const SecurityCart: FC<SecurityCartProp> = ({navigation, route}) => {
                     />
                     <SummaryList
                     title={"Amount"}
-                    value={formatMoney(data?.subtotal, data?.currency)}
+                    value={formatMoney(data?.total, data?.currency)}
                     total
                     />
                 </View>

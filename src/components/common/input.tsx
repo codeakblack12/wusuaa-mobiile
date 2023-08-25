@@ -104,7 +104,7 @@ const BaseInput: React.FC<BaseInputProps> = ({
                 [styles.inputArea,
                 {
                     backgroundColor: colors.inputBg,
-                    borderColor: errorMessage ? "tomato" : colors.border
+                    borderColor: errorMessage ? colors.error : colors.border
                 },
                 containerStyle,
                 // {borderColor}

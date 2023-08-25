@@ -9,6 +9,7 @@ import { BaseText, BaseInput, BaseButton } from '../common';
 
 interface TextInputModalProps {
     label: string;
+    name: string;
     loading: boolean;
     keyboard?: string;
     disabled: boolean;
@@ -16,10 +17,12 @@ interface TextInputModalProps {
     onCancel: any;
     onChange: Function;
     onConfirm: Function;
+    setName: Function;
 }
 
 const TextInputModal: FC<TextInputModalProps> = ({
     label,
+    name,
     loading,
     keyboard = 'default',
     disabled,
@@ -27,6 +30,7 @@ const TextInputModal: FC<TextInputModalProps> = ({
     onCancel,
     onChange,
     onConfirm,
+    setName
    }) => {
 
     return (
@@ -47,15 +51,22 @@ const TextInputModal: FC<TextInputModalProps> = ({
         useNativeDriverForBackdrop>
             <View style={styles.card}>
                 <BaseInput
+                label={"Customer Name"}
+                onChangeText={(text: string) => setName(text)}
+                // keyboard={keyboard}
+                />
+                <BaseInput
                 label={label}
                 onChangeText={(text: string) => onChange(text)}
                 keyboard={keyboard}
+                contStyle={{marginTop: 0}}
                 />
                 <BaseButton
                 buttonText={"Confirm"}
                 onPress={onConfirm}
                 loading={loading}
                 disabled={disabled}
+
                 />
             </View>
         </Modal>
@@ -77,7 +88,7 @@ const styles = StyleSheet.create({
     },
     card: {
         backgroundColor: colors.white,
-        height: hp(253),
+        height: hp(400),
         width: '100%',
         borderTopRightRadius: wp(8),
         borderTopLeftRadius: wp(8),

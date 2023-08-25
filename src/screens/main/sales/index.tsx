@@ -174,7 +174,7 @@ const Sales: FC<SalesProp> = ({navigation}) => {
                     handleStyle={{backgroundColor: colors.primaryBg}}
                     alwaysOpen={hp(117)}
                     handlePosition='inside'
-                    HeaderComponent={selectedCart === "" ? <CartHeader/> : <CartItemHeader counter={selectedCart.counter} cart={selectedCart.uid}/>}
+                    HeaderComponent={selectedCart === "" ? <CartHeader/> : <CartItemHeader counter={selectedCart.counter} name={selectedCart?.customer_name} cart={selectedCart.uid}/>}
                     flatListProps={ selectedCart !== "" && {
                         data: cart_items,
                         renderItem: renderItem,

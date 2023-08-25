@@ -30,7 +30,7 @@ export const CartList = ({selected, onSelect, item}: any) => {
             style={{
                 color: colors.white
             }}
-            >{item?.uid}</BaseText>
+            >{item?.customer_name ? `${item?.customer_name} - ` : ''}{item?.uid}</BaseText>
             <View/>
             <View>
                 {selected?._id === item?._id ? <RadioSelect/> : <RadioUnselect/>}

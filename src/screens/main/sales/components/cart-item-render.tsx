@@ -17,7 +17,7 @@ import { trigger } from "react-native-haptic-feedback";
 import { Notifier, Easing } from 'react-native-notifier';
 
 
-export const CartItemHeader = ({counter, cart}: {counter: string, cart: string}) => {
+export const CartItemHeader = ({counter, cart, name}: {counter: string, cart: string, name: string}) => {
     const dispatch = useAppDispatch()
     const { socket } = useContext(SocketContext);
 
@@ -53,7 +53,7 @@ export const CartItemHeader = ({counter, cart}: {counter: string, cart: string})
 
     return(
         <View style={{marginBottom: hp(20)}}>
-            <BaseText style={styles.title}>{`Counter ${counter} (${cart})`}</BaseText>
+            <BaseText style={styles.title}>{`Counter ${counter} (${cart}) - ${name}`}</BaseText>
             <BaseText style={styles.description}>All Scanned Items</BaseText>
         </View>
     )

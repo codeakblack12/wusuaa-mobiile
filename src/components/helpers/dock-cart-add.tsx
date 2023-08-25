@@ -105,7 +105,7 @@ const DockCartAdd = ({
             <View style={globalStyles.rowBetween}>
                 <BaseInput
                 label='Unit Price'
-                value={formatMoney(price?.value, price?.currency)}
+                value={formatMoney(price?.dockyard_value, price?.currency)}
                 contStyle={{width: "48%"}}
                 editable={false}
                 />
@@ -127,7 +127,7 @@ const DockCartAdd = ({
             </View>
             <BaseInput
             label='Total Price'
-            value={formatMoney(price?.value * data?.quantity, price?.currency)}
+            value={formatMoney(price?.dockyard_value * data?.quantity, price?.currency)}
             editable={false}
             />
 

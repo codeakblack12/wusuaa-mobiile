@@ -1,7 +1,8 @@
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-export const WUSUAA_API = "https://f7ec-102-212-163-17.ngrok-free.app/";
+// export const WUSUAA_API = "https://248f-102-219-153-199.ngrok-free.app/";
 // export const WUSUAA_API = "https://staging.wusuaafrozenfoods.com/";
+export const WUSUAA_API = "https://api.wusuaafrozenfoods.com/";
 
 export const doPost = async (url: string, payload: any) => {
   try {

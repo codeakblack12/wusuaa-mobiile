@@ -38,6 +38,7 @@ const Dockyard: FC<DockyardProp> = ({navigation}) => {
     const [added, setAdded] = useState([{}])
     const [creating, setCreating] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [deleting, setDeleting] = useState(false)
     const dispatch = useAppDispatch()
     const { categories } = useAppSelector(inventoryState)
     const { selected_dock_cart } = useAppSelector(salesState)
@@ -68,6 +69,21 @@ const Dockyard: FC<DockyardProp> = ({navigation}) => {
         await socket.emit('create_dockyard_cart', {
             warehouse: active_warehouse
         })
+    }
+
+    const closeDockCart = async () => {
+        try {
+            setDeleting(true)
+            const response = await sendPost(`sales/dockyard-cart/close`, {
+                cart: selected_dock_cart?.uid
+            })
+            setDeleting(false)
+            navigation.goBack()
+        } catch (error) {
+            setDeleting(false)
+            console.log(error)
+            alert(error)
+        }
     }
 
     const Header = ({}) => {
@@ -153,7 +169,7 @@ const Dockyard: FC<DockyardProp> = ({navigation}) => {
         }
     }
 
-    const onCreate = () => [
+    const onCreate = () => {
         Alert.alert(
             'Dockyard Sale',
             'Do you want to create a new cart',
@@ -162,7 +178,18 @@ const Dockyard: FC<DockyardProp> = ({navigation}) => {
                 {text: 'Yes', onPress: () => createDockCart()},
             ]
         )
-    ]
+    }
+
+    const onClose = () => {
+        Alert.alert(
+            'Close Dockyard Sale',
+            'Do you want to close this cart',
+            [
+                {text: 'No', onPress: () => console.log("")},
+                {text: 'Yes', onPress: () => closeDockCart()},
+            ]
+        )
+    }
 
     const CreateHeader = ({}) => {
         return(
@@ -196,7 +223,7 @@ const Dockyard: FC<DockyardProp> = ({navigation}) => {
                         linearLayoutAnimation()
                         setAdded((prev) => [...prev, {}])
                     }else{
-                        alert("No more categories to add")
+                        alert("Category count exceeded!")
                     }
                 }}
                 >
@@ -205,11 +232,23 @@ const Dockyard: FC<DockyardProp> = ({navigation}) => {
                 <BaseButton
                 buttonText={"Confirm"}
                 loading={loading}
+                disabled={loading || deleting}
                 buttonStyle={{
                     marginTop: hp(50),
-                    marginBottom: hp(100)
+                    // marginBottom: hp(100)
                 }}
                  onPress={handleConfirm}
+                />
+                <BaseButton
+                buttonText={"Close Cart"}
+                loading={deleting}
+                disabled={loading || deleting}
+                buttonStyle={{
+                    marginTop: hp(25),
+                    marginBottom: hp(100),
+                    backgroundColor: colors.error
+                }}
+                 onPress={onClose}
                 />
             </ScrollView>}
             {!selected_dock_cart?.uid && <Modalize

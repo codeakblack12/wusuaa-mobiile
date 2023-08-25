@@ -11,5 +11,6 @@ export const colors = {
     btnDisabled: '#B6B6B6',
     gray: "#B3B3B3",
     light_gray: "#FAFAFA",
-    success_green: "#1FAA4E"
+    success_green: "#1FAA4E",
+    error: "#EF4444",
 }

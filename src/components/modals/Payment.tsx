@@ -116,12 +116,12 @@ const PaymentModal: FC<PaymentModalProps> = ({
                         key={"pos"}
                         value={"POS"}
                         />
-                        {/* <PayRender
+                        <PayRender
                         icon={<Momo/>}
                         title={"Momo Pay"}
                         key={"momo"}
                         value={"MOMO"}
-                        /> */}
+                        />
                     </View>
                     <View>
                     <BaseButton
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     },
     card: {
         backgroundColor: colors.white,
-        height: hp(380),
+        height: hp(430),
         width: wp(340),
         borderRadius: wp(8),
         bottom: 0,
