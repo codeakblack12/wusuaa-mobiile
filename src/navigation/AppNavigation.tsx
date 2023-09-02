@@ -29,6 +29,7 @@ import Account from '../screens/main/profile/account';
 import Warehouse from '../screens/main/profile/warehouse';
 import { trigger } from "react-native-haptic-feedback";
 import { Notifier, Easing } from 'react-native-notifier';
+import Scanner from '../screens/main/scanner';
 
 enableScreens();
 const navigationRef = createNavigationContainerRef();
@@ -180,6 +181,9 @@ function App() {
                 options={{}}
                 />
                 <RootStack.Screen name="scantopay" component={ScanToPay}
+                options={{}}
+                />
+                <RootStack.Screen name="scanner" component={Scanner}
                 options={{}}
                 />
             </RootStack.Navigator>

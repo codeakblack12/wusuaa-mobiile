@@ -104,6 +104,7 @@ const Account: FC<AccountProp> = ({navigation, route}) => {
             label='First Name'
             onChangeText={handleChange('firstName')}
             errorMessage={touched.firstName ? errors.firstName : undefined}
+            editable={false}
             />
 
             <BaseInput
@@ -111,6 +112,7 @@ const Account: FC<AccountProp> = ({navigation, route}) => {
             label='Last Name'
             onChangeText={handleChange('lastName')}
             errorMessage={touched.lastName ? errors.lastName : undefined}
+            editable={false}
             />
 
             <BaseInput
@@ -118,16 +120,17 @@ const Account: FC<AccountProp> = ({navigation, route}) => {
             label='Email address'
             onChangeText={handleChange('email')}
             errorMessage={touched.email ? errors.email : undefined}
+            editable={false}
             />
 
-            <BaseButton
+            {/* <BaseButton
             buttonText={"Save"}
             loading={loading}
             buttonStyle={{
                 marginTop: hp(40)
             }}
             onPress={handleSubmit}
-            />
+            /> */}
 
         </View>
     )

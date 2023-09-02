@@ -18,6 +18,7 @@ import { getCarts, getDockyardCarts, salesState, selectDockCart } from '../../re
 import { Initials } from '../../utils/functions';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SocketContext } from '../../context/socket';
+import ScannerFloat from '../../components/helpers/scanner-float';
 
 
 interface DashboardProp {
@@ -262,6 +263,7 @@ const Dashboard: FC<DashboardProp> = ({navigation}) => {
                 keyExtractor={(item) => item._id}
                 />
             </View>
+            <ScannerFloat/>
         </View>
     )
 }

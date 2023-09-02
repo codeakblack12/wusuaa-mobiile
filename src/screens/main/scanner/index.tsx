@@ -1,5 +1,5 @@
 import React, { FC, useState, useRef, useEffect, useCallback } from 'react';
-import { View, StyleSheet, Image, Pressable } from 'react-native';
+import { View, StyleSheet, Image, Pressable, ImageBackground } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import { BaseText } from '../../../components/common';
 import { globalStyles } from '../../../utils/globalStyles';
@@ -13,14 +13,15 @@ import icons from '../../../utils/icons';
 import debounce from "lodash.debounce"
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-interface SecurityProp {
+interface ScannerProp {
     navigation: NavigationProp;
 }
 
-const Security: FC<SecurityProp> = ({navigation}) => {
+const Scanner: FC<ScannerProp> = ({navigation}) => {
     const insets = useSafeAreaInsets();
     const modalizeRef = useRef<Modalize>(null);
     const [flashMode, setFlashMode] = useState('off');
+    const [barcode, setBarcode] = useState("")
 
     const onError = useCallback(
         (error) => {
@@ -37,7 +38,7 @@ const Security: FC<SecurityProp> = ({navigation}) => {
             return
         }
 
-        return navigation.navigate("securitycart", {_id: content})
+        setBarcode(content)
     }
 
     const onBarCodeRead = useCallback(debounce(onBarCodeRead_, 1000, {
@@ -64,7 +65,7 @@ const Security: FC<SecurityProp> = ({navigation}) => {
                 <View
                     style={{height: wp(32), paddingHorizontal: wp(30), borderRadius: hp(8), alignItems: 'center', justifyContent: 'center', backgroundColor: "rgba(0,0,0,0.1)"}}
                 >
-                    <BaseText style={{color: colors.white, textAlign: 'center'}}>Security Checks</BaseText>
+                    <BaseText style={{color: colors.white, textAlign: 'center'}}>Barcode Scanner</BaseText>
                 </View>
                 <View/>
             </View>
@@ -83,10 +84,12 @@ const Security: FC<SecurityProp> = ({navigation}) => {
             onStatusChange={onStatusChange}>
                 <View style={[StyleSheet.absoluteFill, styles.imgContainer]}>
                     <Header/>
-                    <Image
+                    <ImageBackground
                         source={require('../../../assets/general/scan-box.png')}
                         style={styles.frame}
-                    />
+                    >
+                        <BaseText style={{color: colors.white, textAlign: 'center', fontSize: fontSz(36), fontFamily: Fonts.Bold}}>{barcode}</BaseText>
+                    </ImageBackground>
                     <Modalize
                     modalStyle={{backgroundColor: colors.black, flex: 1}}
                     handleStyle={{backgroundColor: colors.primaryBg}}
@@ -94,7 +97,7 @@ const Security: FC<SecurityProp> = ({navigation}) => {
                     alwaysOpen={hp(117)}
                     handlePosition='inside'
                     ref={modalizeRef}>
-                        <BaseText style={styles.title}>Scan To View Receipt</BaseText>
+                        <BaseText style={styles.title}>Scan To show code</BaseText>
                         {/* <BaseText style={styles.description}>Select to view receipt</BaseText> */}
                     </Modalize>
                 </View>
@@ -146,4 +149,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default Security
+export default Scanner

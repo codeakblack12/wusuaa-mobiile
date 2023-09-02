@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: 0
     },
     frame: {
-      width: hp(225),
+      width: hp(343),
       height: hp(159),
       alignSelf: 'center',
       justifyContent: 'center',

@@ -41,7 +41,6 @@ const Login: FC<LoginProps>  = ({ navigation }) => {
         try {
             setLoading(true)
             const login = await dispatch(LoginUser(data))
-            console.log(login)
             if(login?.type === "user/loginUser/fulfilled" && login?.payload?.access_token){
                 // navigation.navigate("tabs")
                 const userInfo = await dispatch(getMe())
@@ -99,18 +98,24 @@ const Login: FC<LoginProps>  = ({ navigation }) => {
             secureTextEntry
             errorMessage={touched.password ? errors.password : undefined}
             />
-            {/* <BaseText
-                style={{
-                    fontFamily: Fonts.Regular,
-                    fontSize: fontSz(12),
-                    lineHeight: hp(18.9),
-                    marginTop: hp(10),
-                    textAlign: "right"
-                }}
-                onPress={() => navigation.navigate("forgotPwd")}
-            >
-                Forgot Password?
-            </BaseText> */}
+            <View style={{
+                flexDirection: "row",
+                justifyContent: "flex-end"
+            }}>
+                <BaseText
+                    style={{
+                        fontFamily: Fonts.Regular,
+                        fontSize: fontSz(12),
+                        lineHeight: hp(18.9),
+                        marginTop: hp(10),
+                        textAlign: "right"
+                    }}
+                    onPress={() => navigation.navigate("forgotPwd")}
+                >
+                    Forgot Password?
+                </BaseText>
+            </View>
+
             <BaseButton
             buttonText={"Continue"}
             loading={loading}

@@ -5,12 +5,45 @@ import { globalStyles } from '../../utils/globalStyles';
 import { BaseText, BaseInput, BaseButton } from '../../components/common';
 import { fontSz, hp } from '../../utils/constants';
 import Fonts from '../../utils/fonts';
+import { useFormik } from 'formik';
+import { ForgotPasswordFormData } from '../../forms/models';
+import { ForgotPasswordSchema } from '../../forms/schemas';
+import { doPost } from '../../server';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface ForgotPasswordProps {
     navigation: NavigationProp;
 }
 
 const ForgotPassword: FC<ForgotPasswordProps>  = ({ navigation }) => {
+
+    const insets = useSafeAreaInsets();
+
+    const [loading, setLoading] = useState(false)
+
+    const initialValues: ForgotPasswordFormData = {
+        email: '',
+    };
+
+    const { values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue } = useFormik({
+        initialValues,
+        validationSchema: ForgotPasswordSchema,
+        onSubmit: async (values: ForgotPasswordFormData) => {
+            try {
+                setLoading(true)
+
+                const response = await doPost("auth/reset-password", values)
+                alert("Check your email for the next steps")
+                navigation.goBack()
+                setLoading(false)
+            } catch (error) {
+                alert(error?.response?.data?.message || "Seems something went wrong!")
+                setLoading(false)
+            }
+        },
+    });
+
+
     return(
         <View style={[globalStyles.wrapper, {justifyContent: 'space-between'}]}>
             <View>
@@ -19,7 +52,7 @@ const ForgotPassword: FC<ForgotPasswordProps>  = ({ navigation }) => {
                         fontSize: fontSz(32),
                         fontFamily: Fonts.Bold,
                         lineHeight: hp(43.2),
-                        marginTop: hp(20)
+                        marginTop: insets.top
                     }}
                 >
                     Forgot Password
@@ -37,17 +70,19 @@ const ForgotPassword: FC<ForgotPasswordProps>  = ({ navigation }) => {
                 </BaseText>
                 <BaseInput
                 label='Email address'
+                onChangeText={handleChange('email')}
+                errorMessage={touched.email ? errors.email : undefined}
                 />
             </View>
             <BaseButton
             buttonText={"Continue"}
-            // loading={true}
+            loading={loading}
             buttonStyle={{
                 // marginBottom: hp(20),
                 // position: "absolute",
-                // bottom: hp(40)
+                bottom: insets.bottom
             }}
-            onPress={() => navigation.navigate("resetPwd")}
+            onPress={handleSubmit}
             />
         </View>
     )

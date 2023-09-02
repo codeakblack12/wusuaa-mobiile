@@ -19,6 +19,7 @@ import { SocketContext } from '../../../context/socket';
 import { userState } from '../../../redux/slices/userSlice';
 import { trigger } from "react-native-haptic-feedback";
 import { Notifier, Easing } from 'react-native-notifier';
+import moment from 'moment';
 
 interface InventoryProp {
     navigation: NavigationProp;
@@ -145,26 +146,45 @@ const Inventory: FC<InventoryProp> = ({navigation}) => {
 
     const ItemRender = ({item, index}: any) => {
         return (
-            <View style={styles.itemCard}>
-                <BaseText
-                lineHeight={hp(19)}
-                style={{
-                    color: colors.white
-                }}
-                >{index + 1}</BaseText>
-                <BaseText
-                lineHeight={hp(19)}
-                style={{
-                    color: colors.white
-                }}
-                >{firstLetterUppercase(item?.category)}</BaseText>
-                <BaseText
-                lineHeight={hp(19)}
-                style={{
-                    color: colors.white,
-                    fontFamily: Fonts.Bold
-                }}
-                >{item?.uid?.toUpperCase()}</BaseText>
+            <View>
+                <View style={[styles.itemCard, {borderBottomWidth: 0}]}>
+                    <BaseText
+                    lineHeight={hp(19)}
+                    style={{
+                        color: colors.white
+                    }}
+                    >{index + 1}.</BaseText>
+                    <BaseText
+                    lineHeight={hp(19)}
+                    style={{
+                        color: colors.white
+                    }}
+                    >{firstLetterUppercase(item?.category)}</BaseText>
+                    <BaseText
+                    lineHeight={hp(19)}
+                    style={{
+                        color: colors.white,
+                        fontFamily: Fonts.Bold
+                    }}
+                    >{item?.uid?.toUpperCase()}</BaseText>
+                </View>
+                <View
+                style={[styles.itemCard, {paddingVertical: 0, paddingBottom: hp(20.5), flexDirection: 'column'}]}
+                >
+                    <BaseText
+                    style={{
+                        color: colors.white,
+                        fontSize: fontSz(10)
+                    }}
+                    >{`${item?.creator_firstname} ${item?.creator_lastname}`}</BaseText>
+                    <BaseText
+                    style={{
+                        color: colors.white,
+                        fontSize: fontSz(10),
+                        marginTop: hp(5)
+                    }}
+                    >{moment(item?.createdAt).format('MMMM Do YYYY, h:mm a')}</BaseText>
+                </View>
             </View>
         )
     }
@@ -230,7 +250,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: 0
     },
     frame: {
-      width: hp(225),
+      width: hp(343),
       height: hp(159),
       alignSelf: 'center',
       justifyContent: 'center',
