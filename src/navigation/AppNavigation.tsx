@@ -30,6 +30,7 @@ import Warehouse from '../screens/main/profile/warehouse';
 import { trigger } from "react-native-haptic-feedback";
 import { Notifier, Easing } from 'react-native-notifier';
 import Scanner from '../screens/main/scanner';
+import ManualSales from '../screens/main/salesv2';
 
 enableScreens();
 const navigationRef = createNavigationContainerRef();
@@ -157,6 +158,9 @@ function App() {
                 options={{}}
                 />
                 <RootStack.Screen name="sales" component={Sales}
+                options={{}}
+                />
+                <RootStack.Screen name="manualsales" component={ManualSales}
                 options={{}}
                 />
                 <RootStack.Screen name="security" component={Security}

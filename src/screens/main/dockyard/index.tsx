@@ -170,6 +170,7 @@ const Dockyard: FC<DockyardProp> = ({navigation}) => {
     }
 
     const onCreate = () => {
+        // cfc-8WCQMGW
         Alert.alert(
             'Dockyard Sale',
             'Do you want to create a new cart',

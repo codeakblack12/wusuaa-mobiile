@@ -1,8 +1,8 @@
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// export const WUSUAA_API = "https://ebc7-102-219-153-213.ngrok-free.app/";
-export const WUSUAA_API = "https://staging.wusuaafrozenfoods.com/";
-// export const WUSUAA_API = "https://api.wusuaafrozenfoods.com/";
+// export const WUSUAA_API = "https://c3e7-102-212-163-17.ngrok-free.app/";
+// export const WUSUAA_API = "https://staging.wusuaafrozenfoods.com/";
+export const WUSUAA_API = "https://api.wusuaafrozenfoods.com/";
 
 export const doPost = async (url: string, payload: any) => {
   const response = await axios.post(WUSUAA_API + url, payload, {
@@ -29,7 +29,7 @@ export const getRequest = async (url: string) => {
           'Content-Type': 'application/json',
           "Charset": "UTF-8"
         },
-        timeout: 15000
+        timeout: 60000
     })
     return response.data
 }

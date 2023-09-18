@@ -87,6 +87,13 @@ const Dashboard: FC<DashboardProp> = ({navigation}) => {
         },
         {
             id: 4,
+            title: "Warehouse Manual Sales",
+            icon: <CartIcon/>,
+            onPress: () => navigation.navigate("manualsales"),
+            disabled: !isAdmin && !userData?.role.includes("SALES")
+        },
+        {
+            id: 5,
             title: "Security Checks",
             icon: <PaperIcon/>,
             onPress: () => navigation.navigate("security"),
