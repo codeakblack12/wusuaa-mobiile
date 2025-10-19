@@ -19,8 +19,9 @@ const DockCartAdd = ({
     data,
     index,
     onChangeCategory,
-    onChangeQuantity
-}: {data: any, index: number, onChangeCategory: Function, onChangeQuantity: Function}) => {
+    onChangeQuantity,
+    onDeleteItem
+}: {data: any, index: number, onChangeCategory: Function, onChangeQuantity: Function, onDeleteItem?: Function}) => {
 
     const [visible, setVisible] = useState(false)
     const [selected, setSelected] = useState(null)
@@ -88,7 +89,7 @@ const DockCartAdd = ({
         <View style={styles.container}>
             {index > 0 && <View style={{
                 width: '100%',
-                borderWidth: hp(1),
+                borderTopWidth: hp(1),
                 marginTop: hp(30),
                 borderColor: colors.gray,
                 borderStyle: 'dashed',
@@ -130,6 +131,24 @@ const DockCartAdd = ({
             value={formatMoney(price?.dockyard_value * data?.quantity, price?.currency)}
             editable={false}
             />
+            {onDeleteItem && <View style={{flex: 1, flexDirection: "row"}}>
+                <TouchableOpacity
+                style={{marginTop: hp(20)}}
+                onPress={() => {onDeleteItem(data)}}
+                >
+                    <BaseText
+                    style={{
+                        fontSize: fontSz(16),
+                        fontFamily: Fonts.Bold,
+                        color: colors.error,
+                    }}
+                    lineHeight={hp(19)}
+                    >
+                        Delete Item
+                    </BaseText>
+                </TouchableOpacity>
+            </View>}
+            
 
             <ListSelectModal
             visible={visible}

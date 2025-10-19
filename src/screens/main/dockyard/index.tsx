@@ -146,6 +146,16 @@ const Dockyard: FC<DockyardProp> = ({navigation}) => {
         setAdded(new_added)
     }
 
+    const deleteItem = (item: any) => {
+        const new_added = added.filter((val) => {
+            if(val?.category != item?.category){
+                return val
+            }
+        })
+        linearLayoutAnimation()
+        setAdded(new_added)
+    }
+
     const handleConfirm = async () => {
         try {
             setLoading(true)
@@ -214,31 +224,43 @@ const Dockyard: FC<DockyardProp> = ({navigation}) => {
                         index={index}
                         onChangeCategory={onChangeCategory}
                         onChangeQuantity={onChangeQuantity}
+                        onDeleteItem={deleteItem}
                         />
                     })
                 }
-                <TouchableOpacity
-                style={{marginTop: hp(20), flexDirection: 'row'}}
-                onPress={() => {
-                    if(added.length < categories.length){
-                        linearLayoutAnimation()
-                        setAdded((prev) => [...prev, {}])
-                    }else{
-                        alert("Category count exceeded!")
-                    }
-                }}
-                >
-                    {/* <AddIcon/> */}
-                    <BaseText
-                    style={{
-                        fontSize: fontSz(16),
-                        fontFamily: Fonts.Bold
+                <View style={{
+                    width: '100%',
+                    borderTopWidth: hp(1),
+                    borderBottomWidth: hp(1),
+                    marginTop: hp(30),
+                    borderColor: colors.gray,
+                    borderStyle: 'dashed',
+                }}>
+                    <TouchableOpacity
+                    style={{marginVertical: hp(40), flexDirection: 'row', backgroundColor: colors.success_green, padding: hp(10), borderRadius: hp(5), justifyContent: "center"}}
+                    onPress={() => {
+                        if(added.length < categories.length){
+                            linearLayoutAnimation()
+                            setAdded((prev) => [...prev, {}])
+                        }else{
+                            alert("Category count exceeded!")
+                        }
                     }}
-                    lineHeight={hp(19)}
                     >
-                    + Add Category
-                    </BaseText>
-                </TouchableOpacity>
+                        {/* <AddIcon/> */}
+                        <BaseText
+                        style={{
+                            fontSize: fontSz(16),
+                            fontFamily: Fonts.Bold,
+                            color: colors.white
+                        }}
+                        lineHeight={hp(19)}
+                        >
+                        + Add New Category
+                        </BaseText>
+                    </TouchableOpacity>
+                </View>
+                
                 <BaseButton
                 buttonText={"Confirm"}
                 loading={loading}
