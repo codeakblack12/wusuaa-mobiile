@@ -247,7 +247,7 @@ const Dashboard: FC<DashboardProp> = ({navigation}) => {
                     </BaseText>
                 </View>
                 <Pressable onPress={() => navigation.navigate("profile")} style={{
-                    borderRadius: hp(100), backgroundColor: colors.black, width: wp(30), height: wp(30),
+                    borderRadius: hp(100), backgroundColor: colors.black, width: wp(50), height: wp(50),
                     alignItems: 'center', justifyContent: 'center'
                 }}>
                     <BaseText

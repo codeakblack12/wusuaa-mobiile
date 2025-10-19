@@ -228,7 +228,16 @@ const Dockyard: FC<DockyardProp> = ({navigation}) => {
                     }
                 }}
                 >
-                    <AddIcon/>
+                    {/* <AddIcon/> */}
+                    <BaseText
+                    style={{
+                        fontSize: fontSz(16),
+                        fontFamily: Fonts.Bold
+                    }}
+                    lineHeight={hp(19)}
+                    >
+                    + Add Category
+                    </BaseText>
                 </TouchableOpacity>
                 <BaseButton
                 buttonText={"Confirm"}
